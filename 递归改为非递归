@@ -1,0 +1,45 @@
+题目：
+ 试将下列递归过程 改写为非递归过程。要求在注释中描述程序功能、预期结果。
+void test(int &sum){
+int x;
+scanf(“%d”, &x);
+if(x==0) sum=0;
+else{
+test(sum);
+sum+=x;
+}
+printf(“%d\n”, sum);
+}
+
+我的解答：
+为了达到与原递归程序完全相同的程序输入和输出，使用了自定义动态数组
+void test(int sum) {		
+	int plus = 3, counter = 0, capacity=1; 
+//plus为动态数组满时额外扩增的单位长度，capacity为当前数组的总容量与plus的比值，counter为当前动态数组中元素的个数-1
+	int* a = (int*)malloc(plus * sizeof(int)); //用与储存每一次循环计算结果的动态数组a
+	int* newbase;		//中间变量，用于动态数组满时的数据交接
+	while (1){
+		if (counter == capacity*plus){	//当容量满时，扩增容量
+			capacity++;
+			newbase = (int*)malloc(capacity * plus);
+			for (int i = 0; i < (capacity - 1) * plus; i++){
+				newbase[i] = a[i];
+			}
+			a = newbase;
+		}
+		int x;
+		scanf("%d", &x);
+		if (x == 0){		//如果为零退出循环，逆向打印数组元素，模拟栈的过程
+			a[counter] = 0;
+			for (int i = counter; i >= 0; i--){
+				printf("%d\n", a[i]);
+			}
+			break;
+		}
+		else{		//如果x不为0，计算x与sum的和并且插入到数组的尾部
+			a[counter] = sum + x;
+			counter++;
+		}	
+	}
+}
+预期结果：先打印出0， 然后将0之前输入的的数字按照逆序分别与sum相加然后输出。
