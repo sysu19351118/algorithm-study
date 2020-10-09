@@ -1,0 +1,52 @@
+#include<iostream>
+#include<string>
+using namespace std;
+int main() {
+	void judge(string);
+	string s;
+	cout << "Please input the string: ";
+	cin >> s;
+	judge(s);
+	return 0;
+}
+
+
+void judge(string a) {
+	int first_begin = 0, first_length=0, second_end, second_length=0;
+	while (a[first_begin] != '&')
+	{
+		first_begin++;
+		first_length++;
+	}
+	first_begin = 0;
+	second_end = first_length+1;//12&21@
+	while (a[second_end] != '@')
+	{
+		second_end++;
+		second_length++;
+	}
+	second_end--;
+	if (second_length != first_length)
+	{
+		cout << "No, it isn't.";
+		return;
+	}
+	else{
+		while (first_length != 1)
+		{
+			if (a[first_begin] != a[second_end])
+			{
+				cout << "No, it isn't.";
+				return;
+			}
+			else
+			{
+				first_begin++;
+				second_end--;
+				first_length--;
+			}
+		}
+		
+	}
+	cout << "Yes, it is.";
+}
