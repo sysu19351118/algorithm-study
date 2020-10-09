@@ -1,0 +1,125 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include<iostream>
+#include<string>
+#define MaxLength 1000
+using namespace std;
+typedef  int elementType;
+
+
+class seqList//定义有序表类
+{
+public:
+    int listdata[MaxLength];
+    int len;           //有效长度
+    seqList() {
+        len = 0;
+    };
+    seqList(string str, int);
+};
+
+
+
+
+
+seqList::seqList(string str, int wid) {//定义带参数的初始化函数
+    len = 0;
+    int beg = 0, end = 0;
+    for (int count = 0; count < wid-1; count++)
+    {
+        while (str[end] != ' ')
+            end++;
+        string a(str, beg, end-beg);
+        beg = end + 1;
+        end++;
+        double num = 0;
+        for (int i = a.length() - 1; i >= 0; i--)
+        {
+            num += (a[i] - '0') * pow(10, a.length()- i-1);
+        }
+        listdata[len] = num;
+        len++;
+    }
+    string a(str, beg, str.length() - beg);
+    double num = 0;
+    for (int i = a.length() - 1; i >= 0; i--)
+    {
+        num += (a[i] - '0') * pow(10, a.length() - i - 1);
+    }
+    listdata[len] = num;
+    len++;
+}
+
+
+
+seqList& append(seqList L, int elem)//实现append函数，在循序表末尾添加数值
+{
+    L.listdata[L.len] = elem;
+    L.len++;
+    return L;
+}
+
+
+
+
+void print(seqList* L)//遍历顺序表
+{
+    int i;
+    cout << L->len<<endl;
+    for (i = 0; i < L->len; ++i)
+    {
+        cout << L->listdata[i]<<" ";
+    }
+}
+
+seqList& merge(seqList L1, seqList L2, seqList L3)//实现merege函数，完成题目要求
+{
+    int i = 0;
+    int j = 0;
+    while (i != L1.len&&j!=L2.len)
+    {
+        if (L1.listdata[i] == L2.listdata[j])
+        {
+            L3 = append(L3, L1.listdata[i]);
+            i++;
+            j++;
+        }
+        else if (L1.listdata[i] > L2.listdata[j])
+            j++;
+        else
+            i++;
+    }
+    return L3;
+}
+
+int main()
+{
+    string strnum;
+    getline(cin, strnum);
+
+    string str1, str2;
+    getline(cin, str1);
+    getline(cin, str2);
+
+    int beg = 0, end = 0;
+    while (strnum[end] != ' ')
+        end++;
+    string strn(strnum, beg, end - beg);
+    beg = end + 1;
+    string strm(strnum, beg, strnum.length() - beg);
+    int n = 0, m = 0;
+    for (int i = strn.length() - 1; i >= 0; i--)
+    {
+        n += (strn[i] - '0') * pow(10, strn.length() - i - 1);
+    }
+    for (int i = strm.length() - 1; i >= 0; i--)
+    {
+        m += (strm[i] - '0') * pow(10, strm.length() - i - 1);
+    }
+
+    seqList L1(str1, n);
+    seqList L2(str2, m);
+    seqList L3;
+    L3 = merge(L1, L2, L3);
+    print(&L3);
+}
